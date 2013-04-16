@@ -11,11 +11,11 @@
             android:layout_height="match_parent"
             />
 
-    <!--<com.github.browep.alphaindexer.SideSelector-->
-            <!--android:id="@+id/side_selector"-->
-            <!--android:layout_width="30dp"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:layout_alignParentRight="true"-->
-            <!--/>-->
+    <com.github.browep.alphaindexer.SideSelector
+            android:id="@+id/side_selector"
+            android:layout_width="30dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            />
 </RelativeLayout>
 

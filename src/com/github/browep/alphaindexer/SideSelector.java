@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ListView;
@@ -14,9 +15,12 @@ public class SideSelector extends View {
 
     public static char[] ALPHABET = new char[]{'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
             'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'};
+    public static final int BOTTOM_PADDING = 10;
+
     private SectionIndexer selectionIndexer = null;
     private ListView list;
     private Paint paint;
+    private String[] sections;
 
     public SideSelector(Context context) {
         super(context);
@@ -44,12 +48,19 @@ public class SideSelector extends View {
     public void setListView(ListView _list) {
         list = _list;
         selectionIndexer = (SectionIndexer) _list.getAdapter();
+
+        Object[] sectionsArr = selectionIndexer.getSections();
+        sections = new String[sectionsArr.length];
+        for (int i = 0; i < sectionsArr.length; i++) {
+            sections[i] = sectionsArr[i].toString();
+        }
+
     }
 
     public boolean onTouchEvent(MotionEvent event) {
         super.onTouchEvent(event);
         int y = (int) event.getY();
-        float selectedIndex = ((float) y / (float) getHeight()) * ALPHABET.length;
+        float selectedIndex = ((float) y / (float) getPaddedHeight()) * ALPHABET.length;
 
         if (event.getAction() == MotionEvent.ACTION_DOWN || event.getAction() == MotionEvent.ACTION_MOVE) {
             if (selectionIndexer == null) {
@@ -66,13 +77,17 @@ public class SideSelector extends View {
 
     protected void onDraw(Canvas canvas) {
 
-        int viewHeight = getHeight();
-        int charHeight = viewHeight / ALPHABET.length;
+        int viewHeight = getPaddedHeight();
+        float charHeight = ((float) viewHeight) / (float) sections.length;
 
         float widthCenter = getMeasuredWidth() / 2;
-        for (int i = 0; i < ALPHABET.length; i++) {
-            canvas.drawText(String.valueOf(ALPHABET[i]), widthCenter, charHeight + (i * charHeight), paint);
+        for (int i = 0; i < sections.length; i++) {
+            canvas.drawText(String.valueOf(sections[i]), widthCenter, charHeight + (i * charHeight), paint);
         }
         super.onDraw(canvas);
+    }
+
+    private int getPaddedHeight() {
+        return getHeight() - BOTTOM_PADDING;
     }
 }
