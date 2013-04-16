@@ -1,3 +1,5 @@
 *iml
 gen/
 .idea/
+bin/
+out/
